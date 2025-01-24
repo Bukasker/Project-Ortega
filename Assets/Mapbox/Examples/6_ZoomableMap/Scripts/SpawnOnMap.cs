@@ -11,6 +11,7 @@
     using System;
     using Mapbox.Unity.Utilities;
     using Mapbox.Platform.Cache;
+    using UnityEngine.SceneManagement;
 
     public class SpawnOnMap : MonoBehaviour
     {
@@ -33,16 +34,54 @@
         [SerializeField]
         GameObject arrowPrefab;
 
-        [SerializeField] List<GameObject> spawnedObjects;
+        [SerializeField] public List<GameObject> spawnedObjects;
         [SerializeField] List<LineRenderer> lines;
         [SerializeField] List<GameObject> arrowInstances;
+
+        public PointerList spawnedPointers;
+
+        public List<String> objectsHints;
 
         private EventPonter EventPonter;
         private GameObject EventGameobject;
         LocationStatus playerLocation;
 
+        public static SpawnOnMap spawnOnMapInstatce;
+
+
+
+        private void Awake()
+        {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        private void OnDestroy()
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            PointerList pointerList = FindObjectOfType<PointerList>();
+
+            if (pointerList != null)
+            {
+                spawnedPointers = pointerList;
+                Debug.Log("PointerList znaleziony i przypisany.");
+            }
+            else
+            {
+                Debug.LogWarning("Nie znaleziono PointerList w DontDestroyOnLoad.");
+            }
+        }
+
+
         void Start()
         {
+            if(spawnOnMapInstatce == null)
+            {
+                spawnOnMapInstatce = this;
+            }
             spawnedObjects = new List<GameObject>();
             lines = new List<LineRenderer>();
             arrowInstances = new List<GameObject>();
@@ -108,6 +147,7 @@
             instance.transform.localPosition = map.GeoToWorldPosition(playerPosition, true);
             instance.transform.localScale = new Vector3(spawnScale, spawnScale, spawnScale);
             spawnedObjects.Add(instance);
+            spawnedPointers.pointers.Add(instance);
 
             if (spawnedObjects.Count > 1)
             {
@@ -147,6 +187,7 @@
             spawnedObjects.Clear();
             lines.Clear();
             arrowInstances.Clear();
+            objectsHints.Clear();
 
             int numberOfObjects = 3;
             float spawnRadiusInMeters = 120f;
@@ -180,6 +221,7 @@
                 instance.transform.localPosition = map.GeoToWorldPosition(locations[i], true);
                 instance.transform.localScale = new Vector3(spawnScale, spawnScale, spawnScale);
                 spawnedObjects.Add(instance);
+                spawnedPointers.pointers.Add(instance);
 
                 var eventPonter = instance.GetComponentInChildren<EventPonter>();
                 if (eventPonter != null)

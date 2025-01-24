@@ -163,6 +163,7 @@ GameObject:
   - component: {fileID: 2225390859917022317}
   - component: {fileID: 6056997969559451923}
   - component: {fileID: -6632775753636155637}
+  - component: {fileID: 234840427376770063}
   m_Layer: 0
   m_Name: Pointer
   m_TagString: Untagged
@@ -204,6 +205,7 @@ MonoBehaviour:
   amplitude: 2
   ferequency: 0.5
   pointerYPosition: 10
+  hint: 
   eventPos:
     x: 0
     y: 0
@@ -261,6 +263,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce6f63bad25255c41a8fbb07f25f5d1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &234840427376770063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7601309632073137527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f6fdaa4bb8dad44882687f0b7abf948, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isCameraPhotoSet: 0
 --- !u!1001 &100117653675775291
 PrefabInstance:
   m_ObjectHideFlags: 0

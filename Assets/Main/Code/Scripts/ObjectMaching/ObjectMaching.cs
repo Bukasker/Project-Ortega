@@ -40,6 +40,19 @@ public class ObjectMaching : MonoBehaviour
         */
 	}
 
+
+	public void SaveOrCompare()
+	{
+		if (PointerSceneInfo.PointerSceneInfoInstance.isCameraPhotoSet == false)
+		{
+			SaveObject();
+        }
+		else
+		{
+			CompareObject();
+        }
+	}
+
 	public void SaveObject()
 	{
 		// Pobierz aktualn¹ klatkê z kamery AR

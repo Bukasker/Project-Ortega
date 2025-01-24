@@ -8,6 +8,7 @@ public class EventPonter : MonoBehaviour
 	[SerializeField] private float amplitude = 2.0f;
 	[SerializeField] private float ferequency = 0.5f;
 	[SerializeField] private float pointerYPosition = 10f;
+	[SerializeField] public string hint;
 	private TMP_Text distanceText;
 	LocationStatus playerLocation;
 	public Vector2d eventPos;
@@ -34,11 +35,13 @@ public class EventPonter : MonoBehaviour
 
 	public void DisplayDistance()
 	{
+		/*
 		playerLocation = GameObject.Find("Canvas").GetComponent<LocationStatus>();
 		var currentPlayerLocation = new GeoCoordinatePortable.GeoCoordinate(playerLocation.GetLocationLat(),playerLocation.GetLocationLon());
 		var eventLocation = new GeoCoordinatePortable.GeoCoordinate(eventPos[0], eventPos[1]);
 		var distance =  currentPlayerLocation.GetDistanceTo(eventLocation);
 		TMP_Text distanceText = GameObject.Find("Canvas/DebugMenu/Distance Text")?.GetComponent<TMP_Text>();
 		distanceText.text = "Distance: " + distance.ToString("F2") + " m";
+		*/
 	}
 }

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ab6f1974fedcaa4d949d423db72b7c1, type: 3}
+  m_Name: Zombie
+  m_EditorClassIdentifier: 
+  MonsterName: Zombie
+  Icon: {fileID: 21300000, guid: 9b3ce7da8e9e436479cc6d97fe4d7417, type: 3}
+  MobDifficulty: 600
+  MobPrefab: {fileID: 4208273545377459746, guid: f059ac91a6eae584b804497c52b1ab74,
+    type: 3}
+  spawnChance: 50

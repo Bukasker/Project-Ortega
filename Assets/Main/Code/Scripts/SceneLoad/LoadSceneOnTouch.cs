@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class LoadSceneOnTouch : MonoBehaviour
 {
@@ -52,40 +53,66 @@ public class LoadSceneOnTouch : MonoBehaviour
 
     private void OnMouseDown()
     {
+        // SprawdŸ, czy klikniêto na UI i czy element ma CanvasGroup z w³¹czonym blocksRaycasts
+        if (IsPointerOverBlockingCanvasGroup())
+        {
+            Debug.Log("Klikniêto na UI z aktywnym blokowaniem interakcji!");
+            return;
+        }
+
         if (!string.IsNullOrEmpty(sceneToLoad))
         {
-            // Ustaw pozycjê ko³a na miejsce klikniêcia myszk¹
+            // Reszta istniej¹cego kodu...
             if (circleRectTransform != null && parentCanvas != null)
             {
                 Vector2 localPoint;
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                    parentCanvas.transform as RectTransform, // RectTransform Canvas
-                    Input.mousePosition, // Pozycja kursora
-                    parentCanvas.worldCamera, // Kamera przypisana do Canvas
-                    out localPoint // Wyjœcie: punkt w lokalnych wspó³rzêdnych Canvas
+                    parentCanvas.transform as RectTransform,
+                    Input.mousePosition,
+                    parentCanvas.worldCamera,
+                    out localPoint
                 );
 
-                // Ustaw now¹ pozycjê dla kó³ka
                 circleRectTransform.anchoredPosition = localPoint;
             }
-            else
-            {
-                Debug.LogWarning("Nie przypisano RectTransformu dla ko³a lub brak Canvas!");
-            }
 
-            // Uruchom trigger animacji
             if (canvasAnimator != null)
             {
                 canvasAnimator.SetTrigger("IsTransiting");
             }
 
-            // Poczekaj 0.4 sekundy i za³aduj scenê
             StartCoroutine(LoadSceneWithDelay(0.4f));
         }
         else
         {
             Debug.LogWarning("Nie ustawiono nazwy sceny do wczytania!");
         }
+    }
+
+    private bool IsPointerOverBlockingCanvasGroup()
+    {
+        if (EventSystem.current == null) return false;
+
+        // Lista wyników dla raycasta
+        var pointerEventData = new PointerEventData(EventSystem.current)
+        {
+            position = Input.mousePosition
+        };
+
+        var raycastResults = new System.Collections.Generic.List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerEventData, raycastResults);
+
+        // SprawdŸ, czy któryœ z elementów ma CanvasGroup z blocksRaycasts
+        foreach (var result in raycastResults)
+        {
+            var canvasGroup = result.gameObject.GetComponentInParent<CanvasGroup>();
+            if (canvasGroup != null && canvasGroup.blocksRaycasts)
+            {
+                return true; // Znaleziono blokuj¹cy element UI
+            }
+        }
+
+        return false; // Nie znaleziono elementu UI blokuj¹cego interakcjê
     }
 
     private IEnumerator LoadSceneWithDelay(float delay)

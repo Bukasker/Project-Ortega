@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ab6f1974fedcaa4d949d423db72b7c1, type: 3}
+  m_Name: Spider
+  m_EditorClassIdentifier: 
+  MonsterName: New Monster
+  Icon: {fileID: 21300000, guid: 512b1183e06226b44b752554aa9900f1, type: 3}
+  MobDifficulty: 1400
+  MobPrefab: {fileID: 2349315586429971577, guid: fb913fce4a8fdea4cb8a4a26bfc8e12b,
+    type: 3}
+  spawnChance: 5
