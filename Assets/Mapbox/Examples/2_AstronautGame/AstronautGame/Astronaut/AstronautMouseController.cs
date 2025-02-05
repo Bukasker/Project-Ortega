@@ -58,7 +58,7 @@ namespace Mapbox.Examples
                 return;
 
             previousPos = transform.position;
-            //CamControl();
+            CamControl();
 
             // Ignoruj kliknięcia, jeśli wskaźnik jest nad UI
             if (IsPointerOverUI())

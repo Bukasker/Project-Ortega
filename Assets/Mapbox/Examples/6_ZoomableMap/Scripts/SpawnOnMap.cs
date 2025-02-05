@@ -159,8 +159,8 @@
             {
                 var lineObj = Instantiate(Line);
                 var line = lineObj.GetComponent<LineRenderer>();
-                line.startWidth = 0.7f;
-                line.endWidth = 0.7f;
+                line.startWidth = 0.3f;
+                line.endWidth = 0.3f;
                 line.material = new Material(Shader.Find("Sprites/Default"));
                 line.startColor = Color.red;
                 line.endColor = Color.red;

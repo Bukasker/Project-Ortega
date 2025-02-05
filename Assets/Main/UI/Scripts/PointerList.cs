@@ -37,4 +37,46 @@ public class PointerList : MonoBehaviour
         Lines.RemoveAll(obj => obj == null);
         Arrows.RemoveAll(obj => obj == null);
     }
+
+    public void StartCor()
+    {
+        StartCoroutine(ClearAllPointersAsync());
+    }
+
+    IEnumerator ClearAllPointersAsync()
+    {
+        foreach (var pointer in Pointers)
+        {
+            if (pointer != null)
+            {
+                Destroy(pointer);
+                yield return null; 
+            }
+        }
+        Pointers.Clear();
+
+        // Usuwanie obiektów z Lines
+        foreach (var line in Lines)
+        {
+            if (line != null)
+            {
+                Destroy(line.gameObject);
+                yield return null;
+            }
+        }
+        Lines.Clear();
+
+        // Usuwanie obiektów z Arrows
+        foreach (var arrow in Arrows)
+        {
+            if (arrow != null)
+            {
+                Destroy(arrow);
+                yield return null;
+            }
+        }
+        Arrows.Clear();
+    }
+
+
 }
