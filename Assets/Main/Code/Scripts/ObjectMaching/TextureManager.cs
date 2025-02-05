@@ -5,18 +5,11 @@ using UnityEngine.SceneManagement;
 public class TextureManager : MonoBehaviour
 {
 	public static TextureManager Instance { get; private set; }
-	public GameObject pointerGameObject;
-	public GameObject pointerReplaceGameObject;
-
 	public List<Texture2D> textures = new List<Texture2D>();
-
-	private void Awake()
+	
+	public void SetAsInstance()
 	{
-		if (textures.Count > 0)
-		{
-			pointerGameObject.Destroy();
-			Instantiate(pointerReplaceGameObject,this.transform);
-		}
+		Instance = this;
 	}
 
 	private void OnMouseDown()
