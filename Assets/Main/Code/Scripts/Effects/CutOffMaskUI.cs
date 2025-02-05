@@ -24,7 +24,7 @@ public class CutOffMaskUI : Image
         base.OnDestroy();
         if (_customMaterial != null)
         {
-            Destroy(_customMaterial); // Upewnij siê, ¿e materia³ zostanie zwolniony.
+            Destroy(_customMaterial);
         }
     }
 }
