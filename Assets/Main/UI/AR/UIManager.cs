@@ -8,11 +8,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject[] fightUI;
     [SerializeField] private GameObject[] cameraUI;
 
-
-    public void Update()
-    {
-        
-    }
+    [SerializeField] private Animator animator;
 
 
     public void SetCameraUIActive()
@@ -30,6 +26,14 @@ public class UIManager : MonoBehaviour
 
     public void SetFightUIActive()
     {
+        animator.SetTrigger("IsTrasistingOut");
+        StartCoroutine(DelayFightUI(0.5f));
+    }
+
+    private IEnumerator DelayFightUI(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
         for (int i = 0; i < fightUI.Length; i++)
         {
             fightUI[i].SetActive(true);
