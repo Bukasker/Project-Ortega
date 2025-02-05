@@ -21,8 +21,8 @@ public class HintPopout : MonoBehaviour
 
     public void AddHintTextToThePoint()
     {
-        var eventPonter = sprawnOnMap.spawnedObjects[sprawnOnMap.spawnedObjects.Count - 1].GetComponent<EventPonter>();
-        eventPonter.hint = hintText.text;
+        var pointerInfo = sprawnOnMap.spawnedObjects[sprawnOnMap.spawnedObjects.Count - 1].GetComponent<PointerSceneInfo>();
+        pointerInfo.hint = hintText.text;
         hintText.text = "Enter the text";
     }
 }
