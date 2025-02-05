@@ -1,14 +1,20 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class CatchBar : MonoBehaviour
 {
-    public RectTransform bar; // Obiekt paska, po którym porusza siê wskaŸnik
-    public RectTransform catchZone; // Obszar, w którym trzeba z³apaæ wskaŸnik
-    public RectTransform indicator; // WskaŸnik poruszaj¹cy siê po pasku
+    public RectTransform bar;
+    public RectTransform catchZone;
+    public RectTransform indicator;
     public Animator animator;
-    public float speed = 200f; // Prêdkoœæ wskaŸnika
-    private bool movingRight = true; // Kierunek ruchu wskaŸnika
+    public float speed = 200f;
+    private bool movingRight = true;
+
+    [SerializeField] private UnityEvent decreaseHeartNumberEvent;
+    [SerializeField] private UnityEvent increaseHeartNumberEvent;
+    [SerializeField] private UnityEvent increaseCatchesNumberEvent;
 
     void Update()
     {
@@ -17,11 +23,9 @@ public class CatchBar : MonoBehaviour
 
     private void MoveIndicator()
     {
-        // Wylicz granice ruchu wskaŸnika
         float barLeft = bar.rect.xMin + bar.localPosition.x;
         float barRight = bar.rect.xMax + bar.localPosition.x;
 
-        // Przesuñ wskaŸnik w odpowiednim kierunku
         Vector3 position = indicator.localPosition;
         if (movingRight)
         {
@@ -47,20 +51,21 @@ public class CatchBar : MonoBehaviour
     public void CheckCatch()
     {
         animator.SetTrigger("Attack");
-        // SprawdŸ, czy wskaŸnik znajduje siê w obszarze catchZone
+
         Rect catchZoneRect = catchZone.rect;
         catchZoneRect.position += (Vector2)catchZone.localPosition;
 
         Vector2 indicatorPosition = indicator.localPosition;
 
+
         if (catchZoneRect.Contains(indicatorPosition))
         {
-            Debug.Log("Caught!");
-            // Dodaj tutaj, co ma siê staæ, gdy z³apiesz wskaŸnik
+            decreaseHeartNumberEvent.Invoke();
         }
         else
         {
-            Debug.Log("Missed!");
+            increaseCatchesNumberEvent.Invoke();
+            increaseHeartNumberEvent.Invoke();
         }
     }
 }
