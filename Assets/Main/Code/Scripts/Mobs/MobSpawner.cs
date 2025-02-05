@@ -4,42 +4,50 @@ using UnityEngine;
 
 public class MobSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject createdPrefabs;
-    [SerializeField] List<Monster> monsters;
+    [SerializeField] private List<GameObject> monstersGameObjects; 
+    [SerializeField] private List<Monster> monsters;
+    public Monster activeMonster;
+    private int lastSpawnedIndex = -1;
 
-    /*
-    void Start()
-    {
-        Monster selectedMonster = GetRandomMonster();
-        if (selectedMonster != null)
-        {
-            Debug.Log("Wylosowano potwora: " + selectedMonster.MonsterName);
-        }
-    }
-    */
+    [SerializeField] private CatchBar catchBar;
+
     private Monster GetRandomMonster()
     {
-        // Obliczenie sumy szans
         float totalChance = 0f;
         foreach (var monster in monsters)
         {
             totalChance += monster.spawnChance;
         }
 
-        // Wylosowanie wartoœci w zakresie od 0 do totalChance
         float randomValue = Random.Range(0, totalChance);
 
-        // Iterowanie przez listê i wybór potwora na podstawie szans
         float cumulativeChance = 0f;
-        foreach (var monster in monsters)
+        for (int i = 0; i < monsters.Count; i++)
         {
-            cumulativeChance += monster.spawnChance;
+            cumulativeChance += monsters[i].spawnChance;
             if (randomValue <= cumulativeChance)
             {
-                return monster;
+                lastSpawnedIndex = i;
+                return monsters[i];
             }
         }
 
-        return null; // W razie braku (nie powinno siê zdarzyæ, jeœli lista ma potwory)
+        return null;
     }
-} 
+
+    public void ActivateMonster()
+    {
+        activeMonster = GetRandomMonster();
+
+        catchBar.speed = activeMonster.MobDifficulty;
+
+        if (lastSpawnedIndex != -1 && lastSpawnedIndex < monstersGameObjects.Count)
+        {
+            GameObject monsterGameObject = monstersGameObjects[lastSpawnedIndex];
+            if (monsterGameObject != null)
+            {
+                monsterGameObject.SetActive(true);
+            }
+        }
+    }
+}
