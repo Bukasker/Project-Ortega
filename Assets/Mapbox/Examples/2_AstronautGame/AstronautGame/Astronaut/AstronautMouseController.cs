@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems; // Importujemy, aby korzystać z EventSystem
 using Mapbox.Unity.Map;
+using TMPro;
 
 namespace Mapbox.Examples
 {
@@ -52,10 +53,12 @@ namespace Mapbox.Examples
 
         void Update()
         {
+
             if (characterDisabled)
                 return;
 
-            CamControl();
+            previousPos = transform.position;
+            //CamControl();
 
             // Ignoruj kliknięcia, jeśli wskaźnik jest nad UI
             if (IsPointerOverUI())
@@ -188,10 +191,9 @@ namespace Mapbox.Examples
 
         void CamControl()
         {
-            deltaPos = transform.position - previousPos;
-            deltaPos.y = 0;
-            cam.transform.position = Vector3.Lerp(cam.transform.position, cam.transform.position + deltaPos, Time.time);
-            previousPos = transform.position;
+            var transformChr = character.GetComponent<Transform>();
+            Vector3 targetPos = new Vector3(transformChr.position.x, cam.transform.position.y, transformChr.position.z-12f);
+            cam.transform.position = Vector3.Lerp(cam.transform.position, targetPos, Time.deltaTime * 5f);
         }
         #endregion
 

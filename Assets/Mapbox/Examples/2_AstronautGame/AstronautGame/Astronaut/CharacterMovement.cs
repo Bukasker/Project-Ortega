@@ -19,7 +19,7 @@ namespace Mapbox.Examples
 		void Update()
 		{
 			
-			if (_controller.enabled)// Because the mouse control script interferes with this script
+			if (_controller.enabled)
 			{
 				return;
 			}
