@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MonsterName: Zombie
   Icon: {fileID: 21300000, guid: 9b3ce7da8e9e436479cc6d97fe4d7417, type: 3}
-  MobDifficulty: 600
+  MobDifficulty: 1600
   MobPrefab: {fileID: 4208273545377459746, guid: f059ac91a6eae584b804497c52b1ab74,
     type: 3}
   spawnChance: 50

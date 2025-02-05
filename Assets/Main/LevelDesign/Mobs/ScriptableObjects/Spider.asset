@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MonsterName: New Monster
   Icon: {fileID: 21300000, guid: 512b1183e06226b44b752554aa9900f1, type: 3}
-  MobDifficulty: 1400
+  MobDifficulty: 3570
   MobPrefab: {fileID: 2349315586429971577, guid: fb913fce4a8fdea4cb8a4a26bfc8e12b,
     type: 3}
   spawnChance: 5

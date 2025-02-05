@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MonsterName: Ghost
   Icon: {fileID: 21300000, guid: 0c822e52f8bf78640b714b784453c1a0, type: 3}
-  MobDifficulty: 900
+  MobDifficulty: 2295
   MobPrefab: {fileID: 5107907962071757118, guid: 928d5e6326405cd42b172e423233d5cf,
     type: 3}
   spawnChance: 15
