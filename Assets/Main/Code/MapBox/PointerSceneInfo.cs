@@ -8,7 +8,8 @@ public class PointerSceneInfo : MonoBehaviour
 {
     public static PointerSceneInfo PointerSceneInfoInstance;
     public bool isCameraPhotoSet = false;
-
+    public bool isMonsterCatched = false;
+    public string hint;
 
     public void SetInstance()
     {
@@ -16,10 +17,8 @@ public class PointerSceneInfo : MonoBehaviour
     }
     private void OnMouseDown()
     {
-        // SprawdŸ, czy klikniêto na UI i czy element ma CanvasGroup z w³¹czonym blocksRaycasts
         if (IsPointerOverBlockingCanvasGroup())
         {
-            Debug.Log("Klikniêto na UI z aktywnym blokowaniem interakcji!");
             return;
         }
 
@@ -30,7 +29,6 @@ public class PointerSceneInfo : MonoBehaviour
     {
         if (EventSystem.current == null) return false;
 
-        // Lista wyników dla raycasta
         var pointerEventData = new PointerEventData(EventSystem.current)
         {
             position = Input.mousePosition
@@ -39,16 +37,15 @@ public class PointerSceneInfo : MonoBehaviour
         var raycastResults = new System.Collections.Generic.List<RaycastResult>();
         EventSystem.current.RaycastAll(pointerEventData, raycastResults);
 
-        // SprawdŸ, czy któryœ z elementów ma CanvasGroup z blocksRaycasts
         foreach (var result in raycastResults)
         {
             var canvasGroup = result.gameObject.GetComponentInParent<CanvasGroup>();
             if (canvasGroup != null && canvasGroup.blocksRaycasts)
             {
-                return true; // Znaleziono blokuj¹cy element UI
+                return true;
             }
         }
 
-        return false; // Nie znaleziono elementu UI blokuj¹cego interakcjê
+        return false; 
     }
 }
