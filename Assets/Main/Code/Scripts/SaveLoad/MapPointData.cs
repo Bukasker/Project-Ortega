@@ -8,7 +8,7 @@ public class MapPointData
 	[Geocode]
 	public string[] locationStrings = new string[2];
 
-	public MapPointData(EventPonter eventPonter)
+	public MapPointData(EventPointer eventPonter)
 	{
 		Vector3 poinPos = eventPonter.transform.position;
 		locationStrings[0] = eventPonter.eventPos[0].ToString();
