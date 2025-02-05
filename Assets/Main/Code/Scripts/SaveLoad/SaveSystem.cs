@@ -7,10 +7,10 @@ using System;
 
 public class SaveSystem : MonoBehaviour
 {
-    [SerializeField] EventPonter ponterPrefab;
+    [SerializeField] EventPointer ponterPrefab;
     [SerializeField] GameObject linePrefab;
     [SerializeField] GameObject arrowPrefab;
-    public static List<EventPonter> mapPoints = new List<EventPonter>();
+    public static List<EventPointer> mapPoints = new List<EventPointer>();
     public static List<AddLineToSaveSystem> lineGameObjects = new List<AddLineToSaveSystem>();
     public static List<AddArrowToSaveSystem> arrowGameObjects = new List<AddArrowToSaveSystem>();
 
@@ -89,7 +89,7 @@ public class SaveSystem : MonoBehaviour
             {
                 MapPointData data = formatter.Deserialize(stream) as MapPointData;
                 Vector3 position = new Vector3(data.position[0], data.position[1], data.position[2]);
-                EventPonter ponter = Instantiate(ponterPrefab, position, Quaternion.identity);
+                EventPointer ponter = Instantiate(ponterPrefab, position, Quaternion.identity);
                 ponter.eventPos[0] = Convert.ToDouble(data.locationStrings[0]);
                 ponter.eventPos[1] = Convert.ToDouble(data.locationStrings[1]);
             }
