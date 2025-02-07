@@ -13,3 +13,5 @@ Project Ortega to mobilna gra terenowa inspirowana klasycznymi podchodami, w kt�
 - [Technologia 1] – Unity
 - [Technologia 2] – Mapbox
 
+## 📷 Screenshoty
+![Image](https://github.com/user-attachments/assets/46ba04a4-418a-448f-a1ae-51d0685411b9)
