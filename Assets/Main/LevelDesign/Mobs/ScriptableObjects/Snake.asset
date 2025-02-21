@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ab6f1974fedcaa4d949d423db72b7c1, type: 3}
-  m_Name: Zombie
+  m_Name: Snake
   m_EditorClassIdentifier: 
-  MonsterName: Zombie
-  Icon: {fileID: 21300000, guid: 9b3ce7da8e9e436479cc6d97fe4d7417, type: 3}
-  MobDifficulty: 1600
-  MobPrefab: {fileID: 4208273545377459746, guid: f059ac91a6eae584b804497c52b1ab74,
+  MonsterName: Snake
+  Icon: {fileID: 21300000, guid: 27a72a6ca4b77ca45b75d39eab7d2206, type: 3}
+  MobDifficulty: 1800
+  MobPrefab: {fileID: 2976949618615886906, guid: b9131a5eea34b1f4dbde4ce04e420ddb,
     type: 3}
-  spawnChance: 20
+  spawnChance: 15

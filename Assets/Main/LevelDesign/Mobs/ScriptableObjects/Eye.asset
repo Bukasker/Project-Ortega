@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9ab6f1974fedcaa4d949d423db72b7c1, type: 3}
-  m_Name: Zombie
+  m_Name: Eye
   m_EditorClassIdentifier: 
-  MonsterName: Zombie
-  Icon: {fileID: 21300000, guid: 9b3ce7da8e9e436479cc6d97fe4d7417, type: 3}
-  MobDifficulty: 1600
-  MobPrefab: {fileID: 4208273545377459746, guid: f059ac91a6eae584b804497c52b1ab74,
+  MonsterName: Eye
+  Icon: {fileID: 21300000, guid: e787d7dc80cda574cb030ae39126f235, type: 3}
+  MobDifficulty: 1500
+  MobPrefab: {fileID: 1373858785756473450, guid: 229c251e5df86434dbf9c0169d879e41,
     type: 3}
-  spawnChance: 20
+  spawnChance: 15
