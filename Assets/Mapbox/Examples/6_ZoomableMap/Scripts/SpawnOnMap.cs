@@ -4,41 +4,33 @@
     using Mapbox.Utils;
     using Mapbox.Unity.Map;
     using System.Collections.Generic;
-    using Random = UnityEngine.Random;
-    using GeoCoordinatePortable;
-    using System;
-    using Mapbox.Unity.Utilities;
     using UnityEngine.SceneManagement;
-    using System.Linq;
+    using System;
+    using GeoCoordinatePortable;
+    using Mapbox.Unity.Utilities;
+    using Random = UnityEngine.Random;
 
     public class SpawnOnMap : MonoBehaviour
     {
-        [SerializeField]
-        AbstractMap map;
+        [Header("Map Settings")]
+        [SerializeField] private AbstractMap map;
 
-        [SerializeField]
-        [Geocode]
-        string[] locationStrings;
+        [Header("Prefabs Settings")]
+        [SerializeField] private float spawnScale = 100f;
+        [SerializeField] private GameObject markerPrefab;
+        [SerializeField] private GameObject linePrefab;
+        [SerializeField] private GameObject arrowPrefab;
 
-        [SerializeField] Vector2d[] locations;
+        [Header("Prefab List Settings")]
+        public List<GameObject> spawnedObjects = new List<GameObject>();
+        public List<GameObject> arrowInstances = new List<GameObject>();
+        public List<LineRenderer> lines = new List<LineRenderer>();
 
-        [SerializeField]
-        float spawnScale = 100f;
-
-        [SerializeField]
-        GameObject markerPrefab;
-        [SerializeField]
-        GameObject Line;
-        [SerializeField]
-        GameObject arrowPrefab;
-
-        [SerializeField] public List<GameObject> spawnedObjects;
-        [SerializeField] List<GameObject> arrowInstances;
-        [SerializeField] List<LineRenderer> lines;
-
-        private EventPointer EventPonter;
-        private GameObject EventGameobject;
-        LocationStatus playerLocation;
+        private string[] locationStrings;
+        private Vector2d[] locations;
+        private EventPointer eventPointer;
+        private GameObject eventGameObject;
+        private LocationStatus playerLocation;
 
         private void Awake()
         {
@@ -50,143 +42,75 @@
             SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
-        public void ResetLists()
-        {
-            
-        }
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            if (PointerList.Instance != null)
-            {
-                foreach (var pointer in PointerList.Instance.Pointers)
-                {
-                    if (!spawnedObjects.Contains(pointer))
-                    {
-                        spawnedObjects.Add(pointer);
-                    }
-                }
+            if (PointerList.Instance == null) return;
 
-                foreach (var line in PointerList.Instance.Lines)
-                {
-                    if (!lines.Contains(line))
-                    {
-                        lines.Add(line);
-                    }
-                }
+            spawnedObjects.AddRange(PointerList.Instance.Pointers);
+            lines.AddRange(PointerList.Instance.Lines);
+            arrowInstances.AddRange(PointerList.Instance.Arrows);
 
-                foreach (var arrow in PointerList.Instance.Arrows)
-                {
-                    if (!arrowInstances.Contains(arrow))
-                    {
-                        arrowInstances.Add(arrow);
-                    }
-                }
-
-                if (locations == null) locations = new Vector2d[0];
-                if (PointerList.Instance.Locations.Length > locations.Length)
-                {
-                    Array.Resize(ref locations, PointerList.Instance.Locations.Length);
-                }
-                for (int i = 0; i < PointerList.Instance.Locations.Length; i++)
-                {
-                    locations[i] = PointerList.Instance.Locations[i];
-                }
-            }
+            locations = new Vector2d[PointerList.Instance.Locations.Length];
+            Array.Copy(PointerList.Instance.Locations, locations, locations.Length);
         }
-        
 
         private void Update()
         {
             if (spawnedObjects.Count > 0 && spawnedObjects[0] != null)
             {
-                EventGameobject = spawnedObjects[0];
-                EventPonter = EventGameobject.GetComponentInChildren<EventPointer>();
-                if (EventPonter != null)
-                {
-                    EventPonter.GetDistance();
-                }
+                eventGameObject = spawnedObjects[0];
+                eventPointer = eventGameObject.GetComponentInChildren<EventPointer>();
+                eventPointer?.GetDistance();
             }
             spawnedObjects.RemoveAll(obj => obj == null);
 
-            int count = spawnedObjects.Count;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < spawnedObjects.Count; i++)
             {
-                var spawnedObject = spawnedObjects[i];
-                var location = locations[i];
-                spawnedObject.transform.localPosition = map.GeoToWorldPosition(location, true);
-                spawnedObject.transform.localScale = new Vector3(spawnScale, spawnScale, spawnScale);
+                spawnedObjects[i].transform.localPosition = map.GeoToWorldPosition(locations[i], true);
+                spawnedObjects[i].transform.localScale = Vector3.one * spawnScale;
 
                 if (i > 0 && i - 1 < lines.Count)
                 {
-                    lines[i - 1].SetPosition(0, spawnedObjects[i - 1].transform.position);
-                    lines[i - 1].SetPosition(1, spawnedObjects[i].transform.position);
+                    lines[i - 1].SetPositions(new Vector3[] { spawnedObjects[i - 1].transform.position, spawnedObjects[i].transform.position });
 
                     var direction = (spawnedObjects[i].transform.position - spawnedObjects[i - 1].transform.position).normalized;
                     arrowInstances[i - 1].transform.position = spawnedObjects[i].transform.position;
-                    Vector3 localOffset = arrowInstances[i - 1].transform.TransformDirection(0, 0, -2f);
-                    arrowInstances[i - 1].transform.position += localOffset;
-
-                    float angleY = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-                    arrowInstances[i - 1].transform.rotation = Quaternion.Euler(0, angleY, 0);
+                    arrowInstances[i - 1].transform.rotation = Quaternion.Euler(0, Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg, 0);
                 }
             }
         }
 
         public void AddPlayerLocationPoint()
         {
-
             playerLocation = GameObject.Find("Canvas").GetComponent<LocationStatus>();
-            var playerLat = playerLocation.GetLocationLat();
-            var playerLon = playerLocation.GetLocationLon();
-            var playerPosition = new Vector2d(playerLat, playerLon);
+            var playerPosition = new Vector2d(playerLocation.GetLocationLat(), playerLocation.GetLocationLon());
 
-            if (locations == null)
-            {
-                locations = new Vector2d[0];
-            }
             Array.Resize(ref locations, locations.Length + 1);
-            locations[locations.Length - 1] = playerPosition;
-
+            locations[^1] = playerPosition;
             PointerList.Instance.Locations = locations;
 
             var instance = Instantiate(markerPrefab);
             instance.transform.localPosition = map.GeoToWorldPosition(playerPosition, true);
-            instance.transform.localScale = new Vector3(spawnScale, spawnScale, spawnScale);
+            instance.transform.localScale = Vector3.one * spawnScale;
             spawnedObjects.Add(instance);
             PointerList.Instance.Pointers.Add(instance);
 
             if (spawnedObjects.Count > 1)
             {
-                var lineObj = Instantiate(Line);
-                var line = lineObj.GetComponent<LineRenderer>();
-                line.startWidth = 0.3f;
-                line.endWidth = 0.3f;
-                line.material = new Material(Shader.Find("Sprites/Default"));
-                line.startColor = Color.red;
-                line.endColor = Color.red;
+                var line = Instantiate(linePrefab).GetComponent<LineRenderer>();
+                line.SetPositions(new Vector3[] { spawnedObjects[^2].transform.position, spawnedObjects[^1].transform.position });
                 lines.Add(line);
                 PointerList.Instance.Lines.Add(line);
 
-                line.SetPosition(0, spawnedObjects[spawnedObjects.Count - 2].transform.position);
-                line.SetPosition(1, spawnedObjects[spawnedObjects.Count - 1].transform.position);
-
                 var arrowInstance = Instantiate(arrowPrefab);
                 arrowInstances.Add(arrowInstance);
-                PointerList.Instance.Arrows.Add(instance);
-
-                var direction = (spawnedObjects[spawnedObjects.Count - 1].transform.position - spawnedObjects[spawnedObjects.Count - 2].transform.position).normalized;
-                arrowInstance.transform.position = spawnedObjects[spawnedObjects.Count - 1].transform.position;
-                Vector3 localOffset = arrowInstance.transform.TransformDirection(0, 0, -2f);
-                arrowInstance.transform.position += localOffset;
-
-                float angleY = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-                arrowInstance.transform.rotation = Quaternion.Euler(0, angleY, 0);
+                PointerList.Instance.Arrows.Add(arrowInstance);
             }
 
-            var eventPonter = instance.GetComponentInChildren<EventPointer>();
-            if (eventPonter != null)
+            var eventPointer = instance.GetComponentInChildren<EventPointer>();
+            if (eventPointer != null)
             {
-                eventPonter.eventPos = playerPosition;
+                eventPointer.eventPos = playerPosition;
             }
         }
 
@@ -203,54 +127,37 @@
             playerLocation = GameObject.Find("Canvas").GetComponent<LocationStatus>();
             var playerPosition = new GeoCoordinate(playerLocation.GetLocationLat(), playerLocation.GetLocationLon());
 
-            locationStrings = new string[numberOfObjects];
-
             for (int i = 0; i < numberOfObjects; i++)
             {
                 float angle = Random.Range(0f, 360f);
-                float distance = Random.Range(30.0f, spawnRadiusInMeters);
+                float distance = Random.Range(30f, spawnRadiusInMeters);
 
-                double earthCircumference = 40075000.0;
-                double latOffset = (distance / earthCircumference) * 360.0;
-                double lonOffset = (distance / (earthCircumference * Mathf.Cos((float)(playerPosition.Latitude * Mathf.Deg2Rad)))) * 360.0;
+                float earthCircumference = 40075000f;
+                float latOffset = (distance / earthCircumference) * 360f;
+                float lonOffset = (float)((distance / (earthCircumference * Mathf.Cos((float)playerPosition.Latitude * Mathf.Deg2Rad))) * 360f);
 
-                double offsetLat = latOffset * Mathf.Cos(angle * Mathf.Deg2Rad);
-                double offsetLon = lonOffset * Mathf.Sin(angle * Mathf.Deg2Rad);
-
-                double spawnLat = playerPosition.Latitude + offsetLat;
-                double spawnLon = playerPosition.Longitude + offsetLon;
-
-                locationStrings[i] = $"{spawnLat},{spawnLon}";
-
+                float spawnLat = (float)(playerPosition.Latitude + latOffset * Mathf.Cos(angle * Mathf.Deg2Rad));
+                float spawnLon = (float)(playerPosition.Longitude + lonOffset * Mathf.Sin(angle * Mathf.Deg2Rad));
                 locations[i] = new Vector2d(spawnLat, spawnLon);
 
                 var instance = Instantiate(markerPrefab);
                 instance.transform.localPosition = map.GeoToWorldPosition(locations[i], true);
-                instance.transform.localScale = new Vector3(spawnScale, spawnScale, spawnScale);
+                instance.transform.localScale = Vector3.one * spawnScale;
                 spawnedObjects.Add(instance);
 
-                var eventPonter = instance.GetComponentInChildren<EventPointer>();
-                if (eventPonter != null)
+                var eventPointer = instance.GetComponentInChildren<EventPointer>();
+                if (eventPointer != null)
                 {
-                    eventPonter.eventPos = locations[i];
+                    eventPointer.eventPos = locations[i];
                 }
             }
-            for (int i = 1; i < locationStrings.Length; i++)
-            {
-                if (numberOfObjects > 0)
-                {
-                    var lineObj = Instantiate(Line);
-                    var line = lineObj.GetComponent<LineRenderer>();
-                    line.startWidth = 0.7f;
-                    line.endWidth = 0.7f;
-                    line.material = new Material(Shader.Find("Sprites/Default"));
-                    line.startColor = Color.red;
-                    line.endColor = Color.red;
-                    lines.Add(line);
 
-                    var arrowInstance = Instantiate(arrowPrefab);
-                    arrowInstances.Add(arrowInstance);
-                }
+            for (int i = 1; i < numberOfObjects; i++)
+            {
+                var line = Instantiate(linePrefab).GetComponent<LineRenderer>();
+                lines.Add(line);
+                var arrowInstance = Instantiate(arrowPrefab);
+                arrowInstances.Add(arrowInstance);
             }
         }
     }
