@@ -10050,7 +10050,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   debugUI: {fileID: 21210754}
-  isTestModeOn: 1
+  isTestModeOn: 0
 --- !u!1 &1992993849
 GameObject:
   m_ObjectHideFlags: 0

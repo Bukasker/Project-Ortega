@@ -22,9 +22,6 @@ public class SceneSave : MonoBehaviour
 {
 	private const string SaveFilePath = "sceneState.json";
 
-	/// <summary>
-	/// Zapisuje stan sceny do pliku JSON.
-	/// </summary>
 	public void SaveSceneState()
 	{
 		SceneState sceneState = new SceneState
@@ -34,7 +31,6 @@ public class SceneSave : MonoBehaviour
 
 		foreach (GameObject obj in FindObjectsOfType<GameObject>())
 		{
-			// Mo¿esz tu dodaæ filtry, aby zapisywaæ tylko obiekty spe³niaj¹ce warunki
 			ObjectData data = new ObjectData
 			{
 				name = obj.name,
@@ -49,10 +45,6 @@ public class SceneSave : MonoBehaviour
 
 		Debug.Log("Zapisano stan sceny: " + json);
 	}
-
-	/// <summary>
-	/// Wczytuje stan sceny z pliku JSON.
-	/// </summary>
 	public void LoadSceneState()
 	{
 		string filePath = GetSaveFilePath();

@@ -7,7 +7,6 @@
     using UnityEngine.SceneManagement;
     using System;
     using GeoCoordinatePortable;
-    using Mapbox.Unity.Utilities;
     using Random = UnityEngine.Random;
 
     public class SpawnOnMap : MonoBehaviour
